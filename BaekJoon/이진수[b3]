@@ -1,3 +1,12 @@
+/* ver.1
+1. n보다 작거나 같은 2의 제곱수 중 가장 큰 숫자로 divNum을 설정
+2. divNum의 지수(exp)를 크기로 갖는 배열 생성
+3. n>divNum일 때 n에서 divNum을 빼고, divNum을 2로 나눔. n이 0이 될 때까지 반복.
+
+(1) 낮은 자리부터 출력해야 하기 때문에 2.에서 추가적으로 배열을 생성해야 했던 것에 대한 아쉬움..
+	divNum을 늘였다가 -> 줄였다가 왕복을 하지 않고, 편도로 해결할 수 없을까?
+*/
+
 Scanner sc = new Scanner(System.in);
 
 int testNum = sc.nextInt();

@@ -1,0 +1,52 @@
+/* ver.1 - 단순 while문
+(1) 최소공약수(GCD)와 최대공약수(LCM)를 코드로 계산하는 법에 대해 알아야 했다.
+    자연수 a와 b(a>=b)의 GCD는  b와 r의 GCD와 같다. r은 a를 b로 나누었을 때의 나머지. (증명은 유클리드 호제법)
+    b%r이 0일 경우, r이 b와 r의 최대공약수라는 뜻이므로 STOP. 아니면 계속 반복
+(2) 재귀문을 쓰는 경우가 많음을 알지만 일단 반복문으로 구현.
+*/
+
+public static void main(String[] args) {
+    Scanner sc = new Scanner(System.in);
+
+    int n = sc.nextInt();
+    int m = sc.nextInt();
+
+    int b = Math.max(n, m);
+    int s = Math.min(n, m);
+
+    int result = b%s;
+
+    while(result != 0) {
+        b = s;
+        s = result;
+        result = b%s;
+    }
+    System.out.println(s);
+    System.out.println(n*m/s);
+}
+
+
+
+/* ver.2 - 재귀함수
+시간은 ver1과 비슷했음
+*/
+
+public static void main(String[] args) {
+    Scanner sc = new Scanner(System.in);
+
+    int n = sc.nextInt();
+    int m = sc.nextInt();
+
+    int a = Math.max(n, m);
+    int b = Math.min(n, m);
+
+    int result = gcd(a, b);
+
+    System.out.println(result);
+    System.out.println(a*b/result);
+}
+
+private static int gcd(int a, int b) {
+    if(a%b == 0) return b;
+    else return gcd(b, a%b);
+}

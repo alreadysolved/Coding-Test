@@ -1,5 +1,6 @@
-/* ver.1
-(1) list를 사용할지, map(TreeMap)을 사용할지 고민을 해보았으나 일단 익숙한 list를 쓰기로 함.
+/* ver.1 - List
+(1) List를 사용할지, TreeMap을 사용할지 고민을 해보았으나 일단 익숙한 list를 쓰기로 함.
+    ver.2에서 생각해보니 TreeMap은 쓸 수 없음. 정렬을 value가 아닌 key 기준으로 하니까. 대신 TreeSet을 써봄
 (2) 두 난쟁이를 찾고 나서, remove(i)를 하고 나면 그 뒤에 있던 index가 전부 1씩 줄어들기 때문에 remove(j)를 하면 문제가 생긴다.
     이때 고민: list[j] 값을 따로 기억해뒀다가 삭제해야 하나?
     그러나 생각해보니, list[j]는 항상 list[i] 뒤에 있기 때문에(i<j) remove(j-1)을 해주면 된다.
@@ -33,6 +34,42 @@ public static void main(String[] args) {
 
                 return;
             }
+        }
+    }
+}
+
+
+/* ver.2 - TreeSet
+(1) Set은 기본적으로 인덱스 기반으로 요소 접근이 안된다. 따라서 iter를 돌렸는데 그다지 의미있는 방법은 아닌 것 같다.
+장점은 ver1에 비해 코드가 나름 간결하다..?
+하지만 더 복잡한 문제에서 사용하기 불편할 듯. List를 쓰자
+*/
+
+public static void main(String[] args) {
+    Scanner sc = new Scanner(System.in);
+
+    Set<Integer> list = new TreeSet<>();
+
+    int sum = 0;
+
+    for (int i = 0; i < 9; i++) {
+        int height = sc.nextInt();
+        list.add(height);
+        sum += height;
+    }
+
+    int add = sum - 100;
+
+    for (Integer h_1 : list) {
+        if (list.contains(add - h_1)) {
+            list.remove(h_1);
+            list.remove(add - h_1);
+
+            for (Integer h : list) {
+                System.out.println(h);
+            }
+
+            return;
         }
     }
 }

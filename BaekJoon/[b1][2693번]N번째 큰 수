@@ -1,0 +1,51 @@
+/* ver.1 - nextInt만 사용
+StringTokenizer를 이용해서 루프를 돌렸는데 자꾸 array 크기가 0이라는 오류가 떠서 한참 고민했다.
+알고보니 nextInt()는 개행문자를 읽어가지 않는다.. 그래서 nextInt() 이후에 nextLine()을 하면 개행문자가 읽어지는 것.
+(1) nextLine()은 모든걸 해결해준다. nextLine()으로 처리한 뒤, Integer.parseXxx()를 써도 좋다.
+    하지만 여기서는 모든 입력이 int형이므로 그냥 ver.1에서는 모든걸 nextInt로 받았다.
+*/
+
+public static void main(String[] args) {
+    Scanner sc = new Scanner(System.in);
+    int caseNum = sc.nextInt();
+
+    for(int i=0; i<caseNum; i++){
+        List<Integer> list = new ArrayList<>();
+
+        for (int j = 0; j < 10; j++) {
+            list.add(sc.nextInt());
+        }
+
+        Collections.sort(list);
+
+        System.out.println(list.get(7));
+    }
+}
+
+
+
+/* ver.2 - 개행문자 수동으로 제거, +StringTokenizer
+StringTokenizer는 개행문자도 읽어가니까.. 맨 첫줄의 개행문자만 지워주면 된다.
+
+(1) 왜 얘가 ver1보다 빠를까. sc.nextXxx()가 파싱보다 오래 걸려서?
+*/
+
+
+public static void main(String[] args) {
+    Scanner sc = new Scanner(System.in);
+    int caseNum = sc.nextInt();
+    sc.nextLine(); //개행문자 \n 지워주기
+
+    for(int i=0; i<caseNum; i++){
+        List<Integer> list = new ArrayList<>();
+        StringTokenizer st = new StringTokenizer(sc.nextLine());
+
+        while(st.hasMoreTokens()){
+            list.add(Integer.parseInt(st.nextToken()));
+        }
+
+        Collections.sort(list);
+
+        System.out.println(list.get(7)); //뒤에서 3번째
+    }
+}

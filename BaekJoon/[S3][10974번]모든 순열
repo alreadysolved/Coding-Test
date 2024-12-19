@@ -48,6 +48,7 @@ public class Main {
 
 
 /* ver.2 - StringBuilder 사용
+StringBuilder는 import가 필요없으니 자주 사용하자
 368ms로 줄었다. 만족
 */
 

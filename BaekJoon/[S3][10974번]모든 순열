@@ -1,0 +1,94 @@
+/* ver.1
+DFS 방식으로 모든 순열을 출력하는 문제.
+나는 재귀가 정말 싫어
+
+(1) 시간이 너무 오래 걸려서(1688ms) 출력 방식에 문제가 있겠거니 생각 -> ver2
+*/
+
+import java.util.*;
+
+public class Main {
+    static int n;
+    static int[] permutation;
+    static boolean[] visited;
+    
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        n = sc.nextInt();
+        permutation = new int[n];
+        visited = new boolean[n];
+        
+        printPermutation(0);
+    }
+    
+    private static void printPermutation(int depth) {
+        if(depth == n) {
+            print();
+            return;
+        }
+        
+        for(int i=0; i<n; i++) {
+            if(!visited[i]) {
+                permutation[depth] = i+1;
+                visited[i] = true;
+                printPermutation(depth+1);
+                visited[i] = false;
+            }
+        }
+    }
+    
+    private static void print() {
+        for (int e : permutation) {
+            System.out.print(e + " ");
+        }
+        System.out.println();
+    }
+}
+
+
+
+/* ver.2 - StringBuilder 사용
+368ms로 줄었다. 만족
+*/
+
+import java.util.*;
+
+public class Main {
+    static int n;
+    static int[] permutation;
+    static boolean[] visited;
+    static StringBuilder sb = new StringBuilder();
+    
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        n = sc.nextInt();
+        permutation = new int[n];
+        visited = new boolean[n];
+        
+        printPermutation(0);
+        System.out.print(sb);
+    }
+    
+    private static void printPermutation(int depth) {
+        if(depth == n) {
+            print();
+            return;
+        }
+        
+        for(int i=0; i<n; i++) {
+            if(!visited[i]) {
+                permutation[depth] = i+1;
+                visited[i] = true;
+                printPermutation(depth+1);
+                visited[i] = false;
+            }
+        }
+    }
+    
+    private static void print() {
+        for (int e : permutation) {
+            sb.append(e + " ");
+        }
+        sb.append("\n");
+    }
+}

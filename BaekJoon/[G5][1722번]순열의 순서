@@ -1,0 +1,210 @@
+/* ver.1 - 브루트 포스
+(1) 시간 초과.
+    지금까지 순열 문제를 풀어본 적이 없어서(1722번 풀기 전임) 그냥 모든 순열을 순서대로 출력하면 되는 줄 알았는데 아니었다.
+    이제 수학 문제로 넘어갈 시간 -> ver2
+*/
+
+import java.util.*;
+
+public class Main {
+    static int n;
+    static int k;
+    static int method;
+    static boolean[] visited;
+    static int[] permutation;
+    static int[] findPermutation;
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        n = sc.nextInt();
+        method = sc.nextInt();
+
+        visited = new boolean[n];
+        permutation = new int[n];
+
+        if(method == 1) {
+            k = sc.nextInt();
+            printResultPermutation(0);
+        }
+        else{
+            findPermutation = new int[n];
+            for(int i=0; i<n; i++){
+                findPermutation[i] = sc.nextInt();
+            }
+            k = 0;
+            printResultSequence(0);
+        }
+    }
+
+    private static void printResultPermutation(int depth){
+        for(int i=0; i<n; i++){
+            if(!visited[i]) {
+                permutation[depth] = i+1;
+                if(depth == n-1) {
+                    if(--k == 0) {
+                        print(permutation);
+                        System.exit(0);
+                    }
+                    return;
+                }
+                visited[i] = true;
+                printResultPermutation(depth+1);
+                visited[i] = false;
+            }
+        }
+    }
+
+    private static void printResultSequence(int depth){
+        for(int i=0; i<n; i++){
+            if(!visited[i]) {
+                permutation[depth] = i+1;
+                if(depth == n-1){
+                    k++;
+                    if(Arrays.equals(permutation, findPermutation)){
+                        System.out.println(k);
+                        System.exit(0);
+                    }
+                    return;
+                }
+                visited[i] = true;
+                printResultSequence(depth+1);
+                visited[i] = false;
+            }
+        }
+    }
+
+    private static void print(int[] permutation) {
+        for (int j : permutation) {
+            System.out.print(j + " ");
+        }
+    }
+}
+
+
+
+/* ver.2
+visited고 뭐고 사용할 필요가 없었다. 단순 연산이라고 해야 할까.
+method 2번이 훨씬 쉬웠다. 각 depth의 element가 무엇인지 미리 주고 시작하니까.
+
+(1) 개인적으로 항상 범위 지정이 어려움. 그 미묘한 1의 차이를 머릿속에서 계산해내지 못해서 실수하는 경우가 많다.
+*/
+
+import java.util.*;
+
+public class Main {
+    static int n;
+    static List<Integer> list = new ArrayList<>();
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        n = sc.nextInt();
+
+        for(int i=1; i<=n; i++) {
+            list.add(i); //list에는 1~n이 들어있음(index는 -1)
+        }
+
+        if(sc.nextInt() == 1){ //k번째 수열을 출력
+            long k = sc.nextLong();
+
+            for(int i=n; i>0; i--) { //i: 1
+                long length = factorial(i-1);
+                for(int element : list) {
+
+                    //k-length == 정확히 0이면, list에 남아있는 element들 역순으로 출력하게 동작해도 됨(그림 그려보면 좋음)
+                    if(k-length <= 0) {
+                        System.out.print(element + " ");
+
+                        list.remove((Integer) element);
+                        break;
+                    }
+                    else k -= length;
+                }
+            }
+        }
+        else{
+            long sequence = 0;
+            for(int i=n; i>1; i--) {
+                int index = list.indexOf(sc.nextInt());
+                sequence += index * factorial(i-1);
+                list.remove(index);
+            }
+            sequence++;
+            System.out.println(sequence);
+        }
+
+    }
+
+    private static long factorial(int n) {
+        if(n<=1) return 1;
+        else return n*factorial(n-1);
+    }
+}
+
+
+
+/*ver.3 -> k-length == 0이면 더이상 내려가지 않고 남아있는 배열 역순으로 출력
+
+(1) 근데 어째 이게 더 느리다. if가 하나 더 늘어났고 거기에 해당될 가능성이 낮아서일까
+*/
+
+import java.util.*;
+
+public class Main {
+    static int n;
+    static List<Integer> list = new ArrayList<>();
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        n = sc.nextInt();
+
+        for(int i=1; i<=n; i++) {
+            list.add(i); //list에는 1~n이 들어있음(index는 -1)
+        }
+
+        if(sc.nextInt() == 1){ //k번째 수열을 출력
+            long k = sc.nextLong();
+
+            for(int i=n; i>0; i--) { //i: 1
+                long length = factorial(i-1);
+                
+                for(int element : list) {
+                    if(k-length <= 0) { //속한다면
+                        System.out.print(element + " ");
+                        list.remove((Integer) element);
+                        
+                        if(k-length == 0){
+                            for(int j=list.size()-1; j>=0; j--){
+                                System.out.print(list.get(j) + " ");
+                            }
+                            System.exit(0);
+                        }
+                        break;
+                    }
+                    else k -= length;
+                }
+            }
+
+        }
+        else{
+            long sequence = 0;
+            for(int i=n; i>1; i--) {
+                int index = list.indexOf(sc.nextInt());
+                sequence += index * factorial(i-1);
+                list.remove(index);
+            }
+            sequence++;
+            System.out.println(sequence);
+        }
+
+    }
+
+    private static long factorial(int n) {
+        if(n<=1) return 1;
+        else return n*factorial(n-1);
+    }
+}
+
+
+
+
+뭔가 엄청나게 까다로운 문제는 아니었는데 풀고나니 골드5라고 해서 뿌듯 . .

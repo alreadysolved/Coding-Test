@@ -1,0 +1,76 @@
+/* ver.1 - 재귀로 구현
+1. 
+
+(1) cal()은 괄호가 열리면, 그 안의 내용물을 다 더하는 함수이기 때문에 ()[]와 같은 배열을 돌리면 ()만 계산된다.
+    그래서 main 안에 while을 한번 돌렸다. 이것도 cal() 안에서 해결하게 만들 수 없었을까
+(2) 예외 처리할 때 중복 line을 줄이고 싶음
+*/
+
+
+import java.util.*;
+
+public class Main {
+    private static String line;
+    private static int index;
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        line = sc.next();
+        index = 0;
+
+        long result = 0;
+        while(index <= line.length()-1){
+            result += cal();
+        }
+
+        System.out.println(result);
+    }
+
+    private static long cal() {
+        if (index >= line.length() - 1) {
+            System.out.println(0);
+            System.exit(0);
+        }
+
+        char c = line.charAt(index);
+        long result = 0;
+        index++;
+
+        if(c == '(') {
+            while(line.charAt(index) != ')') {
+                result += cal();
+                if(index > line.length() - 1) {
+                    System.out.println(0);
+                    System.exit(0);
+                }
+            }
+
+            index++;
+            if(result == 0) return 2;
+            else return result*2;
+        }
+        else if(c == '[') {
+            while(line.charAt(index) != ']') {
+                result += cal();
+                if(index > line.length() - 1) {
+                    System.out.println(0);
+                    System.exit(0);
+                }
+            }
+
+            index++;
+            if(result == 0) return 3;
+            else return result*3;
+        }
+        else { // ) or ]
+            System.out.println(0);
+            System.exit(0);
+            return 0;
+        }
+    }
+}
+
+
+
+한 사흘을 고민해야 했던 문제 . . 벽을 느낌..
+}

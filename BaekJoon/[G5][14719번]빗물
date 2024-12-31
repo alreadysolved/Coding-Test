@@ -1,0 +1,56 @@
+/* ver.1 - 브루트 포스
+그림을 90도 돌려서 가로로 계산하면 좋을 것 같다는 아이디어에서 시작되었다.
+
+1. 각 층마다 list를 새롭게 만들어, 해당 층의 블럭을 순회하면서 높이가 현재 층수와 같거나 큰 블럭을 찾아서 위치(w)를 list에 저장.
+2. 만약 list에 속한 블록이 1개 이하면 그 층에는 빗물이 고이지 않으므로 패스.
+  2-1. else: 리스트의 인접한 두 요소 간의 차이를 합산하여 result에 더한다.
+
+(1) 코드 길이가 짧아서 만족스러움.
+(2) 블록 높이를 저장하는 과정에서 가장 높은 블록을 찾아내도록 하는 것도 시간을 줄이는 데 도움이 되었을 것.
+*/
+
+
+import java.util.*;
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int height = sc.nextInt();
+        int width = sc.nextInt();
+        sc.nextLine();
+
+        int[] drops = new int[width];
+
+        //블록의 높이들을 입력받음 + 동시에 블록의 최대 높이를 계산
+        StringTokenizer st = new StringTokenizer(sc.nextLine());
+        int max = 0;
+        for(int i=0; i<width; i++){
+            drops[i] = Integer.parseInt(st.nextToken());
+            max = Math.max(max, drops[i]);
+        }
+
+        //아랫층부터 한층씩 고여있는 빗물의 길이를 계산
+        int result = 0;
+        for(int h=0; h<max; h++){
+            List<Integer> list = new ArrayList<>();
+
+            for(int w=0; w<width; w++){
+                if(drops[w] > h){
+                    list.add(w);
+                }
+            }
+
+            if(list.size() <= 1) continue;
+            for(int i=1; i<list.size(); i++){
+                result += (list.get(i)-list.get(i-1)) - 1;
+            }
+        }
+
+        System.out.println(result);
+    }
+}
+
+
+/*
+1 Math.max()를 사용하여 배열에서 가장 큰 값을 찾아낸다
+*/

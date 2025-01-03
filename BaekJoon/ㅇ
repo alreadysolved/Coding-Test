@@ -1,0 +1,41 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.*;
+
+public class Main{
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = new StringTokenizer(br.readLine());
+
+        int n = Integer.parseInt(st.nextToken());
+        int s = Integer.parseInt(st.nextToken());
+
+        int[] nums = new int[n];
+//        int[] prefixSum = new int[n];
+        List<Integer> prefixSum = new ArrayList<>();
+
+//        if(s > 99999*10000)
+        st = new StringTokenizer(br.readLine());
+
+        for(int i=0; i<n; i++){
+            nums[i] = Integer.parseInt(st.nextToken());
+//            prefixSum[i] = nums[i];
+            prefixSum.add(nums[i]);
+        }
+
+        int length = 0;
+        while(length < n){
+            length++;
+            if(Collections.max(prefixSum) >= s) {
+                System.out.println(length);
+                System.exit(0);
+            }
+
+            for(int i=0; i+length<n; i++) {
+                prefixSum.set(i, prefixSum.get(i)+nums[i+length]);
+            }
+        }
+        System.out.println(0);
+    }
+}

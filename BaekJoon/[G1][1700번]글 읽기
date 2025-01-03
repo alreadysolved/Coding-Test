@@ -1,0 +1,56 @@
+/*
+논리가 떠오르지 않아 어려웠음.
+문제 분류가 그리디 탐색이길래, 현재 꽂혀있는 콘센트 중에서 가장 나중에 쓰일 콘센트를 뽑는 방식으로 가봄.
+맞았음에 놀랐고 골드1에 두번 놀랐다
+
+(1) 적합한 자료구조의 사용 .. Map, PriorityQueue..
+*/
+
+
+import java.util.*;
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        int n = sc.nextInt();
+        int k = sc.nextInt();
+
+        int[] arr = new int[k];
+        for(int i=0; i<k; i++) {
+            arr[i] = sc.nextInt();
+        }
+
+        List<Integer> currentApps = new ArrayList<>();
+        int result = 0;
+
+        for(int i=0; i<k; i++) {
+
+            int nextApp = arr[i];
+
+            // n개의 멀티탭 구멍, k번의 사용
+            // 현재 멀티탭에서 사용되고 있는 전자제품 목록 필요 -> ArrayList
+            // 만약 다음 전자제품이 멀티탭에 없는 상태? -> 다음 n개 배열 중에 현재 사용되고 있는 전자제품들의 목록을 저장(정렬 필요 O)
+
+            if(currentApps.contains(nextApp)) {
+                continue; //이미 멀티탭에 해당 전기제품이 끼워져있으면
+            } else if(currentApps.size() < n) { //멀티탭에 빈 공간이 있으면?
+                currentApps.add(nextApp);
+            } else { //멀티탭이 가득 찬 상태라면?
+                List<Integer> nextApps = new ArrayList<>(currentApps);
+                int j = i+1;
+
+                while(nextApps.size() > 1 && j < k) {
+                    nextApps.remove((Integer) arr[j]);
+                    j++;
+                }
+
+                currentApps.remove(nextApps.get(0));
+                currentApps.add(nextApp);
+                result++;
+            }
+        }
+
+        System.out.println(result);
+    }
+}

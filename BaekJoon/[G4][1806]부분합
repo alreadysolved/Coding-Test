@@ -1,0 +1,152 @@
+/* ver.1 - 브루트 포스(실패)
+메모리 초과
+효율적인 방법을 찾아야 하나 보다
+*/
+
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.*;
+
+public class Main{
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = new StringTokenizer(br.readLine());
+
+        int n = Integer.parseInt(st.nextToken());
+        int s = Integer.parseInt(st.nextToken());
+
+        int[] nums = new int[n];
+        List<Integer> prefixSum = new ArrayList<>();
+
+        st = new StringTokenizer(br.readLine());
+
+        for(int i=0; i<n; i++){
+            nums[i] = Integer.parseInt(st.nextToken());
+            prefixSum.add(nums[i]);
+        }
+
+        int length = 0;
+        while(length < n){
+            length++;
+            if(Collections.max(prefixSum) >= s) {
+                System.out.println(length);
+                System.exit(0);
+            }
+
+            for(int i=0; i+length<n; i++) {
+                prefixSum.set(i, prefixSum.get(i)+nums[i+length]);
+            }
+        }
+        System.out.println(0);
+    }
+}
+
+
+
+/* ver.2 - for문 사용
+이렇게 오래 걸릴 일인지 매우 현타가 온다.
+범위 계산이나 branch 처리에 매우 약한 편이라는 생각이 든다.
+핵심은 right가 증가했을 때 left가 처음으로 돌아갈 필요 없이 이전 자리에 계속 머무른다는 점. 왜냐? 앞은 이미 탐색을 거친 부분이어서.
+*/
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.*;
+
+public class Main{
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = new StringTokenizer(br.readLine());
+
+        int n = Integer.parseInt(st.nextToken());
+        int target = Integer.parseInt(st.nextToken());
+
+        int[] nums = new int[n];
+
+        st = new StringTokenizer(br.readLine());
+        for (int i = 0; i < n; i++) {
+            nums[i] = Integer.parseInt(st.nextToken());
+        }
+
+        int left = -1;
+        int prefixSum = 0;
+        int minLength = n+1;
+
+        for(int right=0; right<n; right++) {
+            prefixSum += nums[right];
+
+            if(prefixSum < target) {
+                continue;
+            }
+
+            while(prefixSum >= target) {
+                prefixSum -= nums[++left];
+            }
+            minLength = Math.min(minLength, right-left+1);
+
+        }
+
+        if(minLength > n) {
+            System.out.println(0);
+        } else {
+            System.out.println(minLength);
+        }
+
+    }
+}
+
+
+
+/* ver.3 - while문
+for문과 비슷하다.
+처음부터 right++를 사용하여 Math.min을 계산할 때도 right-left+1이 아닌 right-left를 쓸 수 있으며,
+if문을 사용하지 않아도 된다.
+또한 left가 +1될 때마다 min을 계산한다(약간 비효율적?)
+*/
+
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.*;
+
+public class Main{
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = new StringTokenizer(br.readLine());
+
+        int n = Integer.parseInt(st.nextToken());
+        int target = Integer.parseInt(st.nextToken());
+
+        int[] nums = new int[n];
+
+        st = new StringTokenizer(br.readLine());
+        for (int i = 0; i < n; i++) {
+            nums[i] = Integer.parseInt(st.nextToken());
+        }
+
+        int left = -1;
+        int right = 0;
+        int prefixSum = 0;
+        int minLength = n+1;
+
+        while(right<n) {
+            prefixSum += nums[right++];
+
+            while(prefixSum >= target) {
+                prefixSum -= nums[++left];
+                minLength = Math.min(minLength, right-left);
+            }
+        }
+
+        if(minLength > n) {
+            System.out.println(0);
+        } else {
+            System.out.println(minLength);
+        }
+
+    }
+}
